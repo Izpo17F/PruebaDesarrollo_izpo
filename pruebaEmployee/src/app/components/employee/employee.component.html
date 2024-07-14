@@ -1,0 +1,86 @@
+<div class="container mx-auto my-5 p-8 bg-gray-200 rounded-lg shadow-md">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h2 class="text-2xl mb-4">Registrar Empleado</h2>
+      <form [formGroup]="employeeForm" (ngSubmit)="registerEmployee()" class="space-y-4">
+        <div>
+          <label for="name" class="block mb-2">Nombre:</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="w-full p-2 border border-gray-300 rounded"
+          >
+          <div *ngIf="controlHasError('name', 'required')" class="text-red-500">
+            El nombre es requerido.
+          </div>
+        </div>
+        <div>
+          <label for="surname" class="block mb-2">Apellido:</label>
+          <input
+            id="surname"
+            type="text"
+            formControlName="surname"
+            class="w-full p-2 border border-gray-300 rounded"
+          >
+          <div *ngIf="controlHasError('surname', 'required')" class="text-red-500">
+            El apellido es requerido.
+          </div>
+        </div>
+        <div>
+          <label for="salary" class="block mb-2">Salario:</label>
+          <input
+            id="salary"
+            type="number"
+            formControlName="salary"
+            class="w-full p-2 border border-gray-300 rounded"
+          >
+          <div *ngIf="controlHasError('salary', 'required')" class="text-red-500">
+            El salario es requerido.
+          </div>
+          <div *ngIf="controlHasError('salary', 'min')" class="text-red-500">
+            El salario debe ser mayor que 0.
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
+          [disabled]="employeeForm.invalid"
+        >
+          Registrar
+        </button>
+      </form>
+    </div>
+
+    <div>
+      <h2 class="text-2xl mb-4">Empleados Registrados</h2>
+      <table class="min-w-full bg-white rounded-lg shadow-md">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b">ID</th>
+            <th class="py-2 px-4 border-b">Nombre</th>
+            <th class="py-2 px-4 border-b">Apellido</th>
+            <th class="py-2 px-4 border-b">Salario</th>
+            <th class="py-2 px-4 border-b">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees">
+            <td class="py-2 px-4 border-b">{{ employee.id }}</td>
+            <td class="py-2 px-4 border-b">{{ employee.name }}</td>
+            <td class="py-2 px-4 border-b">{{ employee.surname }}</td>
+            <td class="py-2 px-4 border-b">{{ employee.salary | currency }}</td>
+            <td class="py-2 px-4 border-b">
+              <button
+                class="py-1 px-3 bg-red-500 text-white rounded hover:bg-red-700"
+                (click)="deleteEmployee(employee.id)"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
