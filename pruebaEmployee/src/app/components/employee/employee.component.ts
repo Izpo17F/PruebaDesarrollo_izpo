@@ -16,9 +16,19 @@ import { EmployeeResponse } from '../../model/employeeResponse.interface';
 export class EmployeeComponent implements OnInit {
   employeeForm: FormGroup;
   employees: EmployeeResponse[] = [];
+  editEmployeeForm: FormGroup;
+  isEditModalOpen = false;
+  selectedEmployeeId: number | null = null;
+
 
   constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
     this.employeeForm = this.fb.group({
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      salary: [0, [Validators.required, Validators.min(1)]],
+    });
+    this.editEmployeeForm = this.fb.group({
+      id: [null],
       name: ['', Validators.required],
       surname: ['', Validators.required],
       salary: [0, [Validators.required, Validators.min(1)]],
@@ -49,6 +59,40 @@ export class EmployeeComponent implements OnInit {
     this.employeeService.deleteEmployee(id).subscribe(() => {
       this.loadEmployees();
     });
+  }
+
+  editEmployee(employee: EmployeeResponse): void {
+    this.selectedEmployeeId = employee.id;
+    this.editEmployeeForm.setValue({
+      id: employee.id,
+      name: employee.name,
+      surname: employee.surname,
+      salary: employee.salary,
+    });
+    this.isEditModalOpen = true;
+  }
+
+  updateEmployee(): void {
+    if (this.editEmployeeForm.valid) {
+      const employeeRequest: EmployeeRequest = {
+        name: this.editEmployeeForm.value.name,
+        surname: this.editEmployeeForm.value.surname,
+        salary: this.editEmployeeForm.value.salary,
+      };
+      const id = this.editEmployeeForm.value.id;
+      this.employeeService.updateEmployee(employeeRequest, id).subscribe(() => {
+        this.isEditModalOpen = false;
+        this.loadEmployees();
+        alert("Empleado actualizado");
+      });
+    } else {
+      alert("El formulario no esta completo");
+    }
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen = false;
+    this.selectedEmployeeId = null;
   }
 
   controlHasError(control: string, error: string) {

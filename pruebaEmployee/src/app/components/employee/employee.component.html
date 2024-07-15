@@ -77,10 +77,72 @@
               >
                 Eliminar
               </button>
+              <button
+                class="ml-1 py-1 px-3 bg-yellow-500 text-white rounded hover:bg-yellow-700"
+                (click)="editEmployee(employee)"
+              >
+                Editar
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- Modal de edición -->
+<div *ngIf="isEditModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+    <h2 class="text-2xl mb-4">Editar Empleado</h2>
+    <form [formGroup]="editEmployeeForm" (ngSubmit)="updateEmployee()" class="space-y-4">
+      <div>
+        <label for="edit-name" class="block mb-2">Nombre:</label>
+        <input
+          id="edit-name"
+          type="text"
+          formControlName="name"
+          class="w-full p-2 border border-gray-300 rounded"
+        >
+        <div *ngIf="editEmployeeForm.get('name')?.touched && editEmployeeForm.get('name')?.hasError('required')" class="text-red-500">
+          El nombre es requerido.
+        </div>
+      </div>
+      <div>
+        <label for="edit-surname" class="block mb-2">Apellido:</label>
+        <input
+          id="edit-surname"
+          type="text"
+          formControlName="surname"
+          class="w-full p-2 border border-gray-300 rounded"
+        >
+        <div *ngIf="editEmployeeForm.get('surname')?.touched && editEmployeeForm.get('surname')?.hasError('required')" class="text-red-500">
+          El apellido es requerido.
+        </div>
+      </div>
+      <div>
+        <label for="edit-salary" class="block mb-2">Salario:</label>
+        <input
+          id="edit-salary"
+          type="number"
+          formControlName="salary"
+          class="w-full p-2 border border-gray-300 rounded"
+        >
+        <div *ngIf="editEmployeeForm.get('salary')?.touched && editEmployeeForm.get('salary')?.hasError('required')" class="text-red-500">
+          El salario es requerido.
+        </div>
+        <div *ngIf="editEmployeeForm.get('salary')?.touched && editEmployeeForm.get('salary')?.hasError('min')" class="text-red-500">
+          El salario debe ser mayor que 0.
+        </div>
+      </div>
+      <div class="flex justify-end space-x-4">
+        <button type="button" (click)="closeEditModal()" class="py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700">
+          Cancelar
+        </button>
+        <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700">
+          Guardar
+        </button>
+      </div>
+    </form>
   </div>
 </div>

@@ -26,8 +26,8 @@ public class EmployeeService {
     public List<EmployeeResponseDTO> getAllEmployees(){
         return employeeMapper.convertToListDto(employeeRepository.findAll());
     }
-    public EmployeeResponseDTO updateEmployee(EmployeeRequestDTO employeeRequestDTO){
-        Employee employee = new Employee();
+    public EmployeeResponseDTO updateEmployee(EmployeeRequestDTO employeeRequestDTO, Long id){
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("El usuario no fue encontrado"));
         employee.setName(employeeRequestDTO.getName());
         employee.setSurname(employeeRequestDTO.getSurname());
         employee.setSalary(employeeRequestDTO.getSalary());
@@ -37,5 +37,8 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("El empleado no fue encontrado"));
         employeeRepository.delete(employee);
         return employeeMapper.convertToDto(employee);
+    }
+    public EmployeeResponseDTO getEmployeeById(Long id){
+        return employeeMapper.convertToDto(employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("El empleado no fue encontrado")));
     }
 }

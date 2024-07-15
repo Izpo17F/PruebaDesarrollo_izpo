@@ -26,4 +26,11 @@ export class EmployeeService {
   deleteEmployee(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.baseUrl}employee/delete/${id}`);
   }
+  getEmployeeById(id: number): Observable<EmployeeResponse> {
+    return this.httpClient.get<EmployeeResponse>(`${this.baseUrl}employee/get/${id}`);
+  }
+
+  updateEmployee(employeeRequest: EmployeeRequest, id:number): Observable<EmployeeResponse> {
+    return this.httpClient.patch<EmployeeResponse>(`${this.baseUrl}employee/update/${id}`, employeeRequest);
+  }
 }
